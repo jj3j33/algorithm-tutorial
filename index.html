@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>演算法教室 | 互動學習</title>
+  <meta name="description" content="互動式演算法教學網頁，學習選擇排序法與插入排序法，適合國中生">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="app">
+    <!-- Sidebar -->
+    <aside id="sidebar">
+      <button id="sidebar-toggle" title="收合側邊欄">☰</button>
+      <div class="sidebar-inner">
+        <div class="sidebar-header">
+          <div class="sidebar-logo">
+            <span class="sidebar-logo-icon">🎒</span>
+            <span class="sidebar-logo-text">演算法教室</span>
+          </div>
+        </div>
+        <nav class="sidebar-nav">
+          <a href="#" class="nav-item active" data-page="home" id="nav-home">
+            <span class="nav-icon">🏠</span>
+            <span class="nav-label">首頁</span>
+          </a>
+          <a href="#" class="nav-item" data-page="selection" id="nav-selection">
+            <span class="nav-icon">🔍</span>
+            <span class="nav-label">選擇排序法</span>
+          </a>
+          <a href="#" class="nav-item" data-page="insertion" id="nav-insertion">
+            <span class="nav-icon">📌</span>
+            <span class="nav-label">插入排序法</span>
+          </a>
+        </nav>
+        <div class="sidebar-footer">
+          <span class="sidebar-footer-text">國中資訊科技</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main id="main-content">
+      <div id="page-home" class="page active"></div>
+      <div id="page-selection" class="page"></div>
+      <div id="page-insertion" class="page"></div>
+    </main>
+  </div>
+
+  <!-- Celebration Overlay -->
+  <div id="celebration" class="hidden">
+    <div id="celebration-bg"></div>
+    <div id="celebration-card">
+      <div id="celebration-emoji">🎉</div>
+      <h2 id="celebration-title">太厲害了！</h2>
+      <p id="celebration-sub">恭喜你成功完成排序！</p>
+    </div>
+    <div id="confetti-container"></div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast" class="hidden">
+    <span id="toast-icon">😅</span>
+    <span id="toast-msg"></span>
+  </div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
