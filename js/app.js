@@ -276,6 +276,7 @@ function navigateTo(page) {
   if      (page === 'home')      renderHome();
   else if (page === 'selection') renderSelPage();
   else if (page === 'insertion') renderInsPage();
+  else if (page === 'scratch')   renderScratchPage();
 }
 
 function initSidebar() {
@@ -403,6 +404,11 @@ function renderSelPage() {
           </div>
         </div>
       </div>
+      <div class="scratch-btn-container" style="margin-top: 16px; display: flex; justify-content: center;">
+        <button class="btn" id="go-scratch" style="background: #2D3436; color: white; border-radius: 12px; padding: 12px 24px; font-weight: 900; box-shadow: var(--sh-sm);">
+          🎬 觀看 Scratch 程式邏輯 (小白演示)
+        </button>
+      </div>
     </div>`;
 
   /* ── 綁定資料列事件 ── */
@@ -422,6 +428,10 @@ function renderSelPage() {
 
   document.getElementById('sel-steps-hdr').addEventListener('click', () => {
     document.getElementById('sel-steps').classList.toggle('collapsed');
+  });
+
+  document.getElementById('go-scratch')?.addEventListener('click', () => {
+    navigateTo('scratch');
   });
 
   renderSelGame();

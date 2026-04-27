@@ -1,0 +1,116 @@
+
+/* ================================================
+   SCRATCH LOGIC PAGE (Final Review Layout)
+   ================================================ */
+.scratch-container {
+  padding: 10px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.shiro-stage {
+  background: white;
+  border-radius: var(--r-xl);
+  padding: 40px 24px;
+  box-shadow: var(--sh-lg);
+  position: relative;
+  min-height: 600px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ── 變數展示 ── */
+.variable-display {
+  display: flex;
+  gap: 12px;
+}
+
+.var-box {
+  background: #FFF9F2;
+  border: 2px solid #FF8C1A;
+  border-radius: var(--r-md);
+  padding: 8px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 100px;
+  box-shadow: var(--sh-xs);
+}
+
+.var-label { font-size: 0.75rem; color: #DB7916; font-weight: 900; }
+.var-val { font-size: 1.5rem; font-weight: 900; color: #2D3436; }
+
+/* ── 邏輯指引框 ── */
+.logic-hint-box {
+  background: #F1F8FF;
+  border: 2px solid #74B9FF;
+  border-radius: 16px;
+  padding: 12px 24px;
+  width: 100%;
+  min-height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #2D3436;
+  box-shadow: var(--sh-sm);
+}
+
+.logic-ans { padding: 2px 10px; border-radius: 6px; color: white; font-weight: 900; margin: 0 8px; }
+.logic-val {
+  color: #0984E3; /* 寶藍色，用於數值比對 */
+  margin: 0 2px;
+}
+
+.logic-target-pos {
+  color: #D63031; /* 鮮紅色，用於位置更新 */
+  font-size: 1.2rem;
+  margin: 0 4px;
+}
+.logic-ans.yes { background: #55EFC4; }
+.logic-ans.no  { background: #FF7675; }
+
+/* ── 動態標籤 ── */
+.pointer {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: left 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  z-index: 100;
+  pointer-events: none;
+  width: 120px;
+  margin-left: -60px;
+}
+
+.ptr-tag { font-size: 0.75rem; font-weight: 900; color: white; padding: 4px 10px; border-radius: 8px; }
+.ptr-arrow { font-size: 2.2rem; line-height: 0.4; }
+
+/* Area 調整 */
+#scratch-arena {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 40px; /* 縮小未排序與已排序區的間隔 */
+  margin-top: 30px; /* 增加與上方指引框的間距 */
+}
+
+.unsorted-zone {
+  min-height: 280px !important;
+  background: #F8FAFC; 
+  border: 2px dashed #CBD5E1;
+  border-radius: var(--r-lg);
+  position: relative;
+}
+
+.sorted-zone {
+  min-height: 110px !important; /* 降低高度 */
+  background: #F0FDF4;
+  border: 1px solid #BBF7D0;
+}
+
+.zone-label { top: -24px !important; font-size: 0.8rem; }
+.demo-footer { display: flex; align-items: center; justify-content: space-between; padding: 16px 24px; margin-top: 20px; }
+.footer-controls { display: flex; gap: 10px; }
