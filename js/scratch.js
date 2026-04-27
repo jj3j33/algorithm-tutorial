@@ -40,6 +40,13 @@ function renderScratchPage() {
       </div>
 
       <div class="scratch-container">
+        <!-- 資料自定義工具列 -->
+        <div class="scratch-toolbar" style="margin-bottom: 20px; display: flex; gap: 10px; align-items: center; background: #f1f2f6; padding: 12px 20px; border-radius: 12px; border: 1px solid #dfe4ea;">
+          <span style="font-weight: 900; color: #2f3542; font-size: 0.9rem;">🔢 自定義資料：</span>
+          <input type="text" id="sc-input" value="${scState.data.join(', ')}" style="flex: 1; padding: 8px 12px; border-radius: 8px; border: 1px solid #ced4da; font-weight: 700;">
+          <button class="btn btn-grey" id="sc-apply-data" style="padding: 8px 16px; font-size: 0.9rem;">更新資料</button>
+        </div>
+
         <main class="demo-column">
           <div class="shiro-stage">
             
@@ -106,15 +113,29 @@ function renderScratchPage() {
     document.getElementById('sc-play').onclick  = () => { togglePlayScratch(); };
     document.getElementById('sc-next-round').onclick = () => { nextRoundInit(); };
 
+    // 新增：處理自定義資料輸入
+    document.getElementById('sc-apply-data').onclick = () => {
+      const input = document.getElementById('sc-input').value;
+      const d = input.split(/[,，\s]+/).map(Number).filter(n => !isNaN(n) && n !== 0);
+      if (d.length < 2 || d.length > 8) {
+        alert("請輸入 2~8 個數字（以逗號或空格分隔）");
+        return;
+      }
+      scState.data = [...d];
+      fullResetAll(true); // 強制全文重置
+    };
+
     renderScratchGame();
     setTimeout(updatePointers, 50); 
   } catch (err) { alert("ERROR: " + err.message); }
 }
 
-function fullResetAll() {
+function fullResetAll(keepCurrent = true) {
   pauseScratch();
-  const d = [8, 5, 10, 1, 7];
-  scState.data = [...d];
+  if (!keepCurrent) {
+    scState.data = [8, 5, 10, 1, 7];
+  }
+  const d = scState.data;
   if (typeof buildItems === 'function') scState.unsorted = buildItems(d);
   scState.sorted = [];
   scState.freezePtrs = false;
