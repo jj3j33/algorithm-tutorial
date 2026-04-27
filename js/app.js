@@ -404,10 +404,6 @@ function renderSelPage() {
           </div>
         </div>
       </div>
-      <div class="scratch-btn-container" style="margin-top: 16px; display: flex; justify-content: center;">
-        <button class="btn" id="go-scratch" style="background: #2D3436; color: white; border-radius: 12px; padding: 12px 24px; font-weight: 900; box-shadow: var(--sh-sm);">
-          🎬 觀看 Scratch 程式邏輯 (小白演示)
-        </button>
       </div>
     </div>`;
 
@@ -430,9 +426,6 @@ function renderSelPage() {
     document.getElementById('sel-steps').classList.toggle('collapsed');
   });
 
-  document.getElementById('go-scratch')?.addEventListener('click', () => {
-    navigateTo('scratch');
-  });
 
   renderSelGame();
 }
