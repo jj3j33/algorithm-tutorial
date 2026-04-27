@@ -20,7 +20,8 @@ let scState = {
   freezePtrs: false,
   frozenXData: 0,
   frozenXMin: 0,
-  displayVar: { d: 1, m: 1 } 
+  displayVar: { d: 1, m: 1 },
+  history: [] // 儲存歷史狀態
 };
 
 function renderScratchPage() {
@@ -86,6 +87,7 @@ function renderScratchPage() {
           <div class="demo-footer">
             <button class="btn btn-back" id="sc-back">🔙 返回練習區</button>
             <div class="footer-controls">
+              <button class="btn btn-grey" id="sc-undo">↩️ 上一步</button>
               <button class="btn btn-grey" id="sc-reset-round">🔄 重置回合</button>
               <button class="btn btn-grey" id="sc-reset-all">🧹 全部重置</button>
               <button class="btn btn-yellow" id="sc-step">⏭️ 單步執行</button>
@@ -97,6 +99,7 @@ function renderScratchPage() {
     `;
 
     document.getElementById('sc-back').onclick  = () => { pauseScratch(); navigateTo('selection'); };
+    document.getElementById('sc-undo').onclick  = () => { undoStep(); };
     document.getElementById('sc-reset-round').onclick = () => { resetRoundOnly(); };
     document.getElementById('sc-reset-all').onclick = () => { fullResetAll(); };
     document.getElementById('sc-step').onclick  = () => { manualStep(); };
@@ -115,6 +118,7 @@ function fullResetAll() {
   if (typeof buildItems === 'function') scState.unsorted = buildItems(d);
   scState.sorted = [];
   scState.freezePtrs = false;
+  scState.history = []; // 清空歷史
   nextRoundInit();
 }
 
@@ -127,11 +131,13 @@ function resetRoundOnly() {
   scState.subStep = 'idle';
   scState.lastAnswer = null;
   scState.freezePtrs = false;
+  scState.history = []; // 清空歷史
   renderScratchGame();
   setTimeout(updatePointers, 50);
 }
 
 function nextRoundInit() {
+  saveHistory(); // 進入下一回合前儲存，允許回退到搬運完的狀態
   scState.dataPos = 1;
   scState.minPos = 1;
   scState.displayVar = { d: 1, m: 1 };
@@ -180,6 +186,7 @@ function renderScratchGame() {
   const isActive = (scState.phase === 'searching');
   document.getElementById('sc-step').disabled = !isActive;
   document.getElementById('sc-play').disabled = !isActive;
+  document.getElementById('sc-undo').disabled = (scState.history.length === 0);
   document.getElementById('sc-next-round-container').style.display = (scState.phase === 'dragged' ? 'block' : 'none');
 
   updatePointers();
@@ -254,8 +261,48 @@ function updatePointers() {
   ptrMin.style.left  = getX(scState.minPos) + 'px';
 }
 
+function saveHistory() {
+  const snapshot = {
+    unsorted: [...scState.unsorted.map(item => ({...item}))],
+    sorted: [...scState.sorted.map(item => ({...item}))],
+    dataPos: scState.dataPos,
+    minPos: scState.minPos,
+    phase: scState.phase,
+    subStep: scState.subStep,
+    lastAnswer: scState.lastAnswer,
+    freezePtrs: scState.freezePtrs,
+    frozenXData: scState.frozenXData,
+    frozenXMin: scState.frozenXMin,
+    displayVar: { ...scState.displayVar }
+  };
+  scState.history.push(snapshot);
+  if (scState.history.length > 50) scState.history.shift(); // 限制歷史長度
+}
+
+function undoStep() {
+  if (scState.history.length === 0) return;
+  pauseScratch();
+  const lastState = scState.history.pop();
+  
+  scState.unsorted = lastState.unsorted;
+  scState.sorted = lastState.sorted;
+  scState.dataPos = lastState.dataPos;
+  scState.minPos = lastState.minPos;
+  scState.phase = lastState.phase;
+  scState.subStep = lastState.subStep;
+  scState.lastAnswer = lastState.lastAnswer;
+  scState.freezePtrs = lastState.freezePtrs;
+  scState.frozenXData = lastState.frozenXData;
+  scState.frozenXMin = lastState.frozenXMin;
+  scState.displayVar = lastState.displayVar;
+
+  renderScratchGame();
+  setTimeout(updatePointers, 50);
+}
+
 function manualStep() {
   if (scState.phase !== 'searching') return;
+  saveHistory(); // 執行前儲存狀態
   
   if (scState.subStep === 'idle') {
     scState.displayVar = { d: scState.dataPos, m: scState.minPos };
@@ -339,6 +386,7 @@ function bindDragEvents() {
   dropZone.ondragover = e => e.preventDefault();
   dropZone.ondrop = e => {
     e.preventDefault();
+    saveHistory(); // 搬運前儲存狀態
     const id = e.dataTransfer.getData('text/plain');
     const idx = scState.unsorted.findIndex(i => i.id === id);
     if (idx !== -1) {
